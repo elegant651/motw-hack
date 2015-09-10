@@ -1,0 +1,69 @@
+<!--
+  <my-app>
+  @description Boilerplate for the music app (from MOTW 2015 workshop)
+  @version 0.0.1
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/spiral-knob/spiral-knob.html">
+
+<script src="../bower_components/spiral/spiral.min.js"></script>
+
+<dom-module id="my-app">
+
+  <style>
+    /* your style here */
+  </style>
+
+  <template>
+    <!-- your DOM here -->
+    <h1>My First Music App! Will Park</h1>
+    <button on-tap="playSound">Play</button>
+    <spiral-knob id="knob" label="knob" value="0.25"></spiral-knob>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: "my-app",
+
+      properties: {
+        /* user-defined properties */
+        context: {
+          type: Object,
+          value: new AudioContext()
+        },
+
+        osc: Object,
+        amp: Object
+      },
+
+      ready: function() {
+
+      },
+
+      buildGraph: function() {        
+        this.osc = this.context.createOscillator();
+        this.amp = this.context.createGain();
+
+        this.osc.to(this.amp).to(c.DAC);
+        this.osc.start();
+      },
+
+      /* user-defined methods */
+      playSound: function() {          
+          this.buildGraph();
+          this.$.knob.bind(this.amp.gain);
+      },
+
+      /* Polymer built-in event handlers */
+      ready: function () {
+        console.log('My app is ready!');        
+      },
+
+      attached: function () {}
+
+    });
+  </script>
+
+</dom-module>
